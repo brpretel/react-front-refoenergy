@@ -34,7 +34,7 @@ function Login() {
 
   async function handleLogin(username, password) {
   try {
-    const response = await axios.post("https://refoenergyean-production.up.railway.app/auth/logi", {
+    const response = await axios.post("https://refoenergyean-production.up.railway.app/auth/login", {
       username,
       password
     }, {
