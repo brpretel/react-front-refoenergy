@@ -1,0 +1,178 @@
+.left-menu {
+  width: 200px;
+  color: white;
+  box-sizing: border-box;
+  display: flex;
+  flex-shrink: 0;
+  flex-grow: 0;
+  flex-direction: column;
+  align-items: center;
+  transition: width 0.3s;
+  background-color: #183153;
+}
+
+.menu-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+  padding: 15px 0px 0px 0px;
+}
+
+.company-logo {
+  max-width: 35px;
+  height: auto;
+}
+
+.company-card-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  max-width: calc(50% - 0px);
+}
+
+.company-card-info h1,
+.company-card-info span {
+  font-size: 14px; /* Ajusta según necesidad */
+  margin: 0;
+}
+
+.company-card-info span {
+  font-size: 11px;
+}
+
+.menu-element-container {
+  flex-grow: 1; /* Permite que este elemento ocupe el espacio disponible */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding-top: 10px;
+}
+
+.menu-element-container::-webkit-scrollbar {
+  display: none;
+}
+
+.menu-items {
+  list-style: none;
+  padding: 5px 0px 10px 0px;
+}
+
+.menu-item {
+  display: flex; /* Activa Flexbox */
+  align-items: center; /* Centra los elementos verticalmente */
+  padding: 2px;
+  cursor: pointer;
+  padding-left: 20%;
+}
+
+.menu-item:hover {
+  background-color: aliceblue;
+  color: #183153;
+}
+
+.menu-item:hover svg {
+  color: black;
+}
+
+.menu-item svg {
+  width: 12px;
+  margin-right: 5px;
+  color: white;
+  height: 40px;
+}
+
+.menu-icon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.menu-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 20px 10px 0px;
+}
+
+.profile-card-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column; /* Organiza los elementos verticalmente */
+}
+
+.profile-card-info h1 {
+  font-size: 12px;
+  transform: scaleX(1.02); /* Escala horizontalmente */
+}
+
+.profile-card-info span {
+  font-size: 10px;
+}
+
+.profile-card-info h1,
+.profile-card-info span {
+  margin: 0; /* Elimina los márgenes para evitar espacios entre elementos */
+}
+
+.profile-img {
+  max-width: 35px; /* Ajustar según necesidad */
+  height: auto; /* Mantiene la relación de aspecto */
+  border-radius: 5px 5px 5px 5px;
+}
+
+/*COLLAPSED MENU*/
+.left-menu.collapsed {
+  width: 80px; /* Ancho reducido para el menú colapsado */
+  padding-top: 5px;
+}
+
+.menu-header.collapsed {
+  padding-top: 5px;
+}
+
+.company-card-info.collapsed {
+  display: none;
+}
+
+.faBars.collapsed {
+  color: black;
+  font-size: 10px;
+}
+
+.menu-footer.collapsed {
+  padding: 10px 0px 20px 0px;
+}
+
+.profile-img.collapsed {
+  display: none;
+}
+
+.profile-card-info.collapsed {
+  align-items: start;
+}
+
+.profile-card-info.collapsed h1 {
+  font-size: 11px;
+}
+
+.menu-ico.collapsed {
+  height: 20px;
+  width: 15px;
+  padding-top: 10px;
+}
+
+.text-menu.collapsed span {
+  display: none;
+}
+
+.menu-item.collapsed {
+  padding-left: 40%;
+}
+
+.menu-items.collapsed {
+  padding: 10px 0px 10px 0px;
+}
