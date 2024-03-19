@@ -78,7 +78,7 @@ function Login() {
           }}
         >
           <div className="logo">
-            <img src={logoRefoEnergy}></img>
+            <img src={logoRefoEnergy} alt="RefoEnergy Logo"/>
           </div>
           <h2 className="title">Iniciar Sesión</h2>
           <div className="input-field">
@@ -93,7 +93,7 @@ function Login() {
 
           <p className="account-text">
             Don't have an account?{" "}
-            <a href="#" onClick={() => toggleMode("sign-up-mode")}>
+            <a href="https://www.google.com/?hl=es" onClick={() => toggleMode("sign-up-mode")}>
               Sign up
             </a>
           </p>
@@ -113,8 +113,8 @@ function Login() {
           }}
         >
            <div className="logo">
-            <img src={logoRefoEnergy}></img>
-          </div>
+             <img src={logoRefoEnergy} alt="RefoEnergy Logo"/>
+           </div>
           <h2 className="title">Registro de usuarios</h2>
 
           <div className="input-field">
