@@ -23,6 +23,12 @@ code {
   height: 100vh; /* Alto completo de la ventana del navegador */
 }
 
+.sticky-header-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 1000; /* Para asegurarse de que el encabezado se muestre sobre otros elementos */
+}
+
 .content-layout {
   flex-grow: 1;
   display: flex;

@@ -64,7 +64,7 @@ const options = {
 
 export default function Chart() {
   return (
-    <div style={{ position: "relative", height: "40vh", width: "100%" }}>
+    <div style={{ position: "relative", height: "30vh", width: "100%" }}>
       <Bar data={data} options={options} />
     </div>
   );

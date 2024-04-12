@@ -11,16 +11,19 @@ function App() {
   // Función para obtener el título de la página actual
   const getPageTitle = (pathname) => {
     const path = pathname.split("/").filter(Boolean);
-    return path.length > 0 ? path[path.length - 1] : "Dashboard";
+    const rawTitle = path.length > 0 ? path[path.length - 1] : "Dashboard";
+    return rawTitle.charAt(0).toUpperCase() + rawTitle.slice(1);
   };
 
   const title = getPageTitle(location.pathname); // Obtiene el título basado en la ruta
 
   return (
     <div className="main-layout">
-        {showMenuAndHeader && <LeftMenu/>}{" "}
+      {showMenuAndHeader && <LeftMenu />}{" "}
       <div className="content-layout">
-        {showMenuAndHeader && <Header title={title} />}{" "}
+        <div className="sticky-header-wrapper">
+          {showMenuAndHeader && <Header title={title} />}{" "}
+        </div>
         <Routes>
           <Route
             path="/dashboard"

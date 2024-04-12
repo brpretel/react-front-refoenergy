@@ -1,17 +1,13 @@
 import "../style/LeftMenu.css";
-import image from "../logos/usr-image.jpg";
+import image from "../logos/logo-refoenergy.png";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faLayerGroup,
-  faArrowUpRightDots,
-  faBell,
   faUser,
   faGear,
-  faAddressBook,
-  faHandshake,
-  faGraduationCap,
-  faGauge,
+  faHome,
+  faDotCircle,
+  faHistory,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 
@@ -44,19 +40,15 @@ function LeftMenu() {
           src={image}
           alt="Grapefruit slice atop a pile of other slices"
         />
-        <div className={`company-card-info ${collapsedClass}`}>
-          <h1>RefoEnergy</h1>
-          <span>User Charge</span>
-        </div>
       </div>
       <div className={`menu-element-container ${collapsedClass}`}>
         <ul className={`menu-items ${collapsedClass}`}>
           <li
             className={`menu-item ${collapsedClass}`}
-            onClick={() => navigateTo("/Dashboard")}
+            onClick={() => navigateTo("/dashboard")}
           >
             <FontAwesomeIcon
-              icon={faGauge}
+              icon={faHome}
               className={`menu-ico ${collapsedClass}`}
             />
             <div className={`text-menu ${collapsedClass}`}>
@@ -68,11 +60,11 @@ function LeftMenu() {
             onClick={() => navigateTo("/Cases")}
           >
             <FontAwesomeIcon
-              icon={faLayerGroup}
+              icon={faDotCircle}
               className={`menu-ico ${collapsedClass}`}
             />
             <div className={`text-menu ${collapsedClass}`}>
-              <span>Cases</span>
+              <span>En Vivo</span>
             </div>
           </li>
           <li
@@ -80,65 +72,16 @@ function LeftMenu() {
             onClick={() => navigateTo("/Escalations")}
           >
             <FontAwesomeIcon
-              icon={faArrowUpRightDots}
+              icon={faHistory}
               className={`menu-ico ${collapsedClass}`}
             />
             <div className={`text-menu ${collapsedClass}`}>
-              <span>Escalations</span>
+              <span>Historico</span>
             </div>
           </li>
         </ul>
-        <ul className={`menu-items ${collapsedClass}`}>
-          <li
-            className={`menu-item ${collapsedClass}`}
-            onClick={() => navigateTo("/Learning-Portal")}
-          >
-            <FontAwesomeIcon
-              icon={faGraduationCap}
-              className={`menu-ico ${collapsedClass}`}
-            />
-            <div className={`text-menu ${collapsedClass}`}>
-              <span>Learning Portal</span>
-            </div>
-          </li>
-          <li
-            className={`menu-item ${collapsedClass}`}
-            onClick={() => navigateTo("/Slack-Help")}
-          >
-            <FontAwesomeIcon
-              icon={faHandshake}
-              className={`menu-ico ${collapsedClass}`}
-            />
-            <div className={`text-menu ${collapsedClass}`}>
-              <span>Slack Help</span>
-            </div>
-          </li>
-          <li
-            className={`menu-item ${collapsedClass}`}
-            onClick={() => navigateTo("/Contact")}
-          >
-            <FontAwesomeIcon
-              icon={faAddressBook}
-              className={`menu-ico ${collapsedClass}`}
-            />
-            <div className={`text-menu ${collapsedClass}`}>
-              <span>Contact</span>
-            </div>
-          </li>
-        </ul>
-        <ul className={`menu-items ${collapsedClass}`}>
-          <li
-            className={`menu-item ${collapsedClass}`}
-            onClick={() => navigateTo("/Notifications")}
-          >
-            <FontAwesomeIcon
-              icon={faBell}
-              className={`menu-ico ${collapsedClass}`}
-            />
-            <div className={`text-menu ${collapsedClass}`}>
-              <span>Notifications</span>
-            </div>
-          </li>
+
+        <ul className={`menu-items2 ${collapsedClass}`}>
           <li
             className={`menu-item ${collapsedClass}`}
             onClick={() => navigateTo("/Profile")}

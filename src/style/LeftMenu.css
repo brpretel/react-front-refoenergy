@@ -1,6 +1,6 @@
 .left-menu {
-  width: 200px;
-  color: white;
+  width: 250px;
+  color: black;
   box-sizing: border-box;
   display: flex;
   flex-shrink: 0;
@@ -8,68 +8,66 @@
   flex-direction: column;
   align-items: center;
   transition: width 0.3s;
-  background-color: #183153;
+  background-color: white;
 }
 
 .menu-header {
   display: flex;
+  height: 7vh;
   align-items: center;
-  gap: 10px;
-  justify-content: space-between;
-  padding: 15px 0px 0px 0px;
 }
 
 .company-logo {
-  max-width: 35px;
-  height: auto;
-}
-
-.company-card-info {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  max-width: calc(50% - 0px);
-}
-
-.company-card-info h1,
-.company-card-info span {
-  font-size: 14px; /* Ajusta según necesidad */
-  margin: 0;
-}
-
-.company-card-info span {
-  font-size: 11px;
+  flex: 1; /* Ocupa todo el espacio disponible */
+  width: 85%; /* Ajusta el ancho al contenedor */
+  height: 85%; /* Ajusta la altura al contenedor */
+  object-fit: contain; /* La imagen se ajustará para cubrir completamente el contenedor */
 }
 
 .menu-element-container {
   flex-grow: 1; /* Permite que este elemento ocupe el espacio disponible */
   width: 100%;
+  align-items: center;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  padding-top: 10px;
+  padding-top: 50px;
 }
 
 .menu-element-container::-webkit-scrollbar {
   display: none;
 }
 
-.menu-items {
+.menu-items,
+.menu-items2 {
   list-style: none;
-  padding: 5px 0px 10px 0px;
+  width: 90%;
+  align-items: center;
+  background-color: rgb(237, 230, 230);
+  border-radius: 15px;
+}
+
+.menu-items2 {
+  background-color: transparent;
+  padding-top: 30px;
 }
 
 .menu-item {
   display: flex; /* Activa Flexbox */
-  align-items: center; /* Centra los elementos verticalmente */
+  align-items: center;
   padding: 2px;
   cursor: pointer;
   padding-left: 20%;
 }
 
+.text-menu span {
+  font-weight: bold;
+}
+
 .menu-item:hover {
-  background-color: aliceblue;
-  color: #183153;
+  border-radius: 10px;
+  background-color: orange;
+  color: black;
 }
 
 .menu-item:hover svg {
@@ -78,8 +76,8 @@
 
 .menu-item svg {
   width: 12px;
-  margin-right: 5px;
-  color: white;
+  margin-right: 20px;
+  color: black;
   height: 40px;
 }
 
@@ -91,11 +89,10 @@
 
 .menu-footer {
   display: flex;
-  align-items: center;
+  width: 100%;
+  align-items: flex-start;
   gap: 10px;
-  display: flex;
-  justify-content: space-between;
-  padding: 0px 20px 10px 0px;
+  padding: 0px 20px 10px 10px;
 }
 
 .profile-card-info {
@@ -126,16 +123,12 @@
 
 /*COLLAPSED MENU*/
 .left-menu.collapsed {
-  width: 80px; /* Ancho reducido para el menú colapsado */
+  width: 60px; /* Ancho reducido para el menú colapsado */
   padding-top: 5px;
 }
 
 .menu-header.collapsed {
   padding-top: 5px;
-}
-
-.company-card-info.collapsed {
-  display: none;
 }
 
 .faBars.collapsed {
@@ -144,6 +137,7 @@
 }
 
 .menu-footer.collapsed {
+  width: auto;
   padding: 10px 0px 20px 0px;
 }
 
@@ -175,4 +169,5 @@
 
 .menu-items.collapsed {
   padding: 10px 0px 10px 0px;
+  background-color: transparent;
 }
