@@ -5,13 +5,13 @@ function Dashboard() {
   return (
     <div className="dashboard-layout">
       <div className="graph-container">
-        <Chart />
+        <Chart type="humedad" color="#0cb14a"/>
       </div>
       <div className="graph-container">
-        <Chart />
+        <Chart type="weight" color="#ff9100"/>
       </div>
       <div className="graph-container">
-        <Chart />
+        <Chart type="temperature" color="#ffb800"/>
       </div>
     </div>
   );

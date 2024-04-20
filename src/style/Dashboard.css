@@ -14,3 +14,55 @@
     margin: 3%;
   }
 }
+.flex-container {
+  display: -webkit-flex;
+  display: flex;
+  flex-wrap: wrap;
+}
+.temperature-box{
+  border-radius:3px;
+  /*border:2px solid #ffb800;*/
+  background-color: #ffedbf;
+  color:#ffb800;
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  width:180px;
+  height: 70px;
+  font-size: x-large;
+  margin:2px;
+}
+.weight-box{
+  border-radius:3px;
+  /*border:2px solid #ffb800;*/
+  background-color: #ffe3bf;
+  color:#ff9100;
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  width:180px;
+  height: 70px;
+  font-size: x-large;
+  margin:2px;
+}
+.humedad-box{
+  border-radius:3px;
+  /*border:2px solid #ffb800;*/
+  background-color: #c2ebd2;
+  color:#0cb14a;
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  width:180px;
+  height: 70px;
+  font-size: x-large;
+  margin:2px;
+}
+.temperature-box p, .humedad-box p, .weight-box p {
+  color:black;
+  font-size: small;
+  margin-right: 5px;
+}
+.bold{
+  font-weight: bold;
+}
