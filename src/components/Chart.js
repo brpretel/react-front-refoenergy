@@ -1,4 +1,4 @@
-import React, { useState, useEffect }  from "react";
+import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import "../style/Dashboard.css";
 import {
@@ -8,7 +8,7 @@ import {
   BarElement,
   Title,
   Tooltip,
-  Legend, 
+  Legend,
   PointElement,
   LineController,
   LineElement
@@ -40,32 +40,32 @@ const options = {
     },
   },
   scales: {
-   y: {
-       stacked: true,
-       beginAtZero: true
-   },
-   x: {
-       beginAtZero: true
-     }
+    y: {
+      stacked: true,
+      beginAtZero: true
+    },
+    x: {
+      beginAtZero: true
+    }
   }
- };
-var title="";
-var design="";
-var unit="";
+};
+var title = "";
+var design = "";
+var unit = "";
 function Chart(props) {
   console.log(props);
-  if(props.type === 'temperature'){
-    title="Temperatura";
-    design="temperature-box";
-    unit=" °C";
-  }else if (props.type==='weight'){
-    title="Peso";
-    design="weight-box";
-    unit=" Kg";
-  }else {
-    title="Humedad";
-    design="humedad-box";
-    unit=" g/m3";
+  if (props.type === 'temperature') {
+    title = "Temperatura";
+    design = "temperature-box";
+    unit = " °C";
+  } else if (props.type === 'weight') {
+    title = "Peso";
+    design = "weight-box";
+    unit = " Kg";
+  } else {
+    title = "Humedad";
+    design = "humedad-box";
+    unit = " g/m3";
   }
   const [data, setData] = useState(null);
   const [average, setAverage] = useState(null);
@@ -81,42 +81,41 @@ function Chart(props) {
         const temperatures = data.map(row => parseFloat(row.temperature));
         const sum = temperatures.reduce((total, currentValue) => total + currentValue, 0);
         const averaget = sum / temperatures.length;
-        setLast(temperatures[temperatures.length-1]);
+        setLast(temperatures[temperatures.length - 1]);
         setAverage(averaget);
-        const info={
-          labels:data.map(row => row.creation_date),
-          datasets:[{
-              label:props.type,
-              data:data.map(row => row.temperature),
-              borderWidth:1,
-              backgroundColor: props.color,
-              borderColor:props.color
+        const info = {
+          labels: data.map(row => row.creation_date),
+          datasets: [{
+            label: props.type,
+            data: data.map(row => row.temperature),
+            borderWidth: 1,
+            backgroundColor: props.color,
+            borderColor: props.color
           }]
-      };
+        };
         setData(info);
         console.log(data);
       })
       .catch((error) => console.log(error));
-  }, [props.color,props.type]);
+  }, [props.color, props.type]);
   return (
     <div className="flex-container">
-      <div>
+      <div className="chart-data-box">
         <p className="bold">{title}</p><br />
         <div className={design}>
-          <p className="bold">Ultimo Dato</p>  {last !== null ? `${last.toFixed(2)} ` : "Cargando..."} {unit}
+          <p className="bold">Ultimo Dato</p> <div className="value">{last !== null ? `${last.toFixed(2)} ` : "Cargando..."}</div> <div className="unit">{unit}</div>
         </div>
-        <br />
+        <div className="space"></div>
         <div className={design}>
-          <p className="bold">Promedio</p>  {average !== null ? `${average.toFixed(2)} ` : "Cargando..."} {unit}
+          <p className="bold">Promedio</p>  <div className="value">{average !== null ? `${average.toFixed(2)} ` : "Cargando..."}</div> <div className="unit">{unit}</div>
         </div>
-
-
       </div>
-      <div style={{ position: "relative", height: "30vh", width: "80%" }}>
+      <div className="chart-graphic" style={{ position: "relative", height: "30vh", width: "80%" }}>
         {data && <Line data={data} options={options} />}
       </div>
+
     </div>
-    
+
   );
 }
 
