@@ -97,7 +97,7 @@ function Chart(props) {
         console.log(data);
       })
       .catch((error) => console.log(error));
-  }, []);
+  }, [props.color,props.type]);
   return (
     <div className="flex-container">
       <div>
