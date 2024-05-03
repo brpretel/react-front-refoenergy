@@ -11,7 +11,7 @@ function App() {
   // Función para obtener el título de la página actual
   const getPageTitle = (pathname) => {
     const path = pathname.split("/").filter(Boolean);
-    const rawTitle = path.length > 0 ? path[path.length - 1] : "Dashboard";
+    const rawTitle = path.length > 0 ? path[path.length - 1] : "Leturas";
     return rawTitle.charAt(0).toUpperCase() + rawTitle.slice(1);
   };
 
@@ -26,10 +26,10 @@ function App() {
         </div>
         <Routes>
           <Route
-            path="/dashboard"
+            path="/lecturas"
             element={<ProtectedRoute element={Dashboard} />}
           />
-          <Route path="*" element={<Navigate to="/dashboard" />} />
+          <Route path="*" element={<Navigate to="/lecturas" />} />
         </Routes>
       </div>
     </div>

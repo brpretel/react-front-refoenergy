@@ -74,6 +74,16 @@
   color: black;
 }
 
+.menu-item.active, .menu-item:hover {
+  border-radius: 10px;
+  background-color: orange;
+  color: black;
+}
+
+.menu-item.active svg, .menu-item:hover svg {
+  color: black;
+}
+
 .menu-item svg {
   width: 12px;
   margin-right: 20px;
@@ -89,10 +99,15 @@
 
 .menu-footer {
   display: flex;
+  height: 5%;
   width: 100%;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 0px 20px 10px 10px;
+  align-items: center;
+  gap: 20px;
+  padding: 0px 20px 10px 20px;
+}
+
+.ft-ico{
+  font-size: 25px;
 }
 
 .profile-card-info {
@@ -102,7 +117,7 @@
 }
 
 .profile-card-info h1 {
-  font-size: 12px;
+  font-size: 13px;
   transform: scaleX(1.02); /* Escala horizontalmente */
 }
 
@@ -115,11 +130,6 @@
   margin: 0; /* Elimina los márgenes para evitar espacios entre elementos */
 }
 
-.profile-img {
-  max-width: 35px; /* Ajustar según necesidad */
-  height: auto; /* Mantiene la relación de aspecto */
-  border-radius: 5px 5px 5px 5px;
-}
 
 @media (max-width: 768px) {
   /*COLLAPSED MENU*/
@@ -142,9 +152,6 @@
     padding: 10px 0px 20px 0px;
   }
 
-  .profile-img.collapsed {
-    display: none;
-  }
 
   .profile-card-info.collapsed {
     align-items: start;
@@ -171,5 +178,9 @@
   .menu-items.collapsed {
     padding: 10px 0px 10px 0px;
     background-color: transparent;
+  }
+
+  .ft-ico.collapsed{
+    display: none;
   }
 }

@@ -33,20 +33,21 @@ function Login() {
   }
 
   async function handleLogin(username, password) {
-  try {
-    const response = await axios.post("https://refoenergyean-production.up.railway.app/auth/login", {
-      username,
-      password
-    }, {
-      withCredentials: true // Añade esta línea para enviar las cookies con la solicitud
-    });
-    console.log(response.data); // Maneja la respuesta aquí
-    localStorage.setItem("access_token", response.data.access_token);
-    navigate("/app");
-  } catch (error) {
-    console.error("Error al iniciar sesión", error);
+    try {
+      const response = await axios.post("https://refoenergyean-production.up.railway.app/auth/login", {
+        username,
+        password
+      }, {
+        withCredentials: true // Añade esta línea para enviar las cookies con la solicitud
+      });
+      console.log(response.data); // Maneja la respuesta aquí
+      localStorage.setItem("access_token", response.data.access_token);
+      localStorage.setItem("username", username);
+      navigate("/app");
+    } catch (error) {
+      console.error("Error al iniciar sesión", error);
+    }
   }
-}
 
   function checkPasswordMatch() {
     var password = document.getElementById("password").value;
@@ -56,10 +57,11 @@ function Login() {
 
     if (password === confirmPassword) {
       message.innerHTML = "Passwords match!";
-      SignUpButton.disable=false;
+      SignUpButton.disable = false;
     } else {
       message.innerHTML = "Passwords do not match!";
-      SignUpButton.disable=true;    }
+      SignUpButton.disable = true;
+    }
   }
 
 
@@ -78,7 +80,7 @@ function Login() {
           }}
         >
           <div className="logo">
-            <img src={logoRefoEnergy} alt="RefoEnergy Logo"/>
+            <img src={logoRefoEnergy} alt="RefoEnergy Logo" />
           </div>
           <h2 className="title">Iniciar Sesión</h2>
           <div className="input-field">
@@ -112,9 +114,9 @@ function Login() {
             );
           }}
         >
-           <div className="logo">
-             <img src={logoRefoEnergy} alt="RefoEnergy Logo"/>
-           </div>
+          <div className="logo">
+            <img src={logoRefoEnergy} alt="RefoEnergy Logo" />
+          </div>
           <h2 className="title">Registro de usuarios</h2>
 
           <div className="input-field">
@@ -154,7 +156,7 @@ function Login() {
               placeholder="Confirmar Contraseña"
               required
             />
-             <span id="passwordMatchMessage"></span>
+            <span id="passwordMatchMessage"></span>
           </div>
           <div className="input-field">
             <FontAwesomeIcon icon={faEnvelope} />
@@ -166,7 +168,7 @@ function Login() {
               <option value="Payment">Departamento 4</option>
             </select>
           </div>
-          <input type="submit" value="Sign up" className="btn" id="SignUpButton"/>
+          <input type="submit" value="Sign up" className="btn" id="SignUpButton" />
 
 
         </form>
