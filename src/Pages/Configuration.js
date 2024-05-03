@@ -5,7 +5,7 @@ function Configuration() {
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        fetchData(); // Call fetchData on component mount
+        fetchData();
     }, []);
 
     const fetchData = async () => {
@@ -32,8 +32,7 @@ function Configuration() {
         const url = new URL(`https://refoenergyean-production.up.railway.app/admin/update_user_status/${user.id}`);
         url.searchParams.append('status', newStatus);
 
-        console.log(`URL: ${url.toString()}`); // Logs the complete URL with the query parameter
-
+        console.log(`URL: ${url.toString()}`);
         try {
             const response = await fetch(url.toString(), {
                 method: 'PUT',
@@ -43,7 +42,7 @@ function Configuration() {
                 credentials: 'include'
             });
             if (response.ok) {
-                fetchData(); // Re-fetch data after successfully updating the user status
+                fetchData();
             } else {
                 console.error('Failed to update status:', await response.text());
             }

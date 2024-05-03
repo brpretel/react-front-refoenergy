@@ -3,13 +3,20 @@ import image from "../logos/logo-refoenergy.png";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faGear, faHome, faDotCircle, faHistory } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function LeftMenu() {
+  // Initialize from localStorage or default to "/lecturas"
+  const initialActiveItem = localStorage.getItem("activeMenuItem") || "/lecturas";
   const [isExpanded, setIsExpanded] = useState(false);
-  const [activeMenuItem, setActiveMenuItem] = useState("/lecturas"); // Use the initial route path
+  const [activeMenuItem, setActiveMenuItem] = useState(initialActiveItem);
   const navigate = useNavigate();
   const username = localStorage.getItem("username");
+
+  // Update localStorage when activeMenuItem changes
+  useEffect(() => {
+    localStorage.setItem("activeMenuItem", activeMenuItem);
+  }, [activeMenuItem]);
 
   const handleMouseEnter = () => {
     setIsExpanded(true);
@@ -32,7 +39,6 @@ function LeftMenu() {
       </div>
       <div className={`menu-element-container ${collapsedClass}`}>
         <ul className={`menu-items ${collapsedClass}`}>
-          {/* Make sure all paths are consistent */}
           <li className={`menu-item ${collapsedClass} ${activeMenuItem === "/lecturas" ? "active" : ""}`} onClick={() => navigateTo("/lecturas")}>
             <FontAwesomeIcon icon={faHome} className={`menu-ico ${collapsedClass}`} />
             <div className={`text-menu ${collapsedClass}`}><span>Lecturas</span></div>
