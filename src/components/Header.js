@@ -10,6 +10,7 @@ function Header({ title }) {
 
   const logout = () => {
     localStorage.removeItem('access_token');
+    localStorage.removeItem('username');
     navigate("/login");
   };
 
