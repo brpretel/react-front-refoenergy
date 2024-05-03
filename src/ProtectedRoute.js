@@ -15,7 +15,7 @@ function ProtectedRoute({ element: Component }) {
           (error.response.status === 401 || error.response.status === 403)
         ) {
           localStorage.removeItem("access_token");
-          window.location = "/Login";
+          window.location = "lLogin";
         }
         return Promise.reject(error);
       }
@@ -38,7 +38,7 @@ function ProtectedRoute({ element: Component }) {
 
   if (!isAuthenticated || isTokenExpired()) {
     // Si no está autenticado o el token ha expirado, redirecciona a la página de inicio de sesión
-    return <Navigate to="/Login" state={{ from: location }} replace />;
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   return <Component />;
