@@ -72,7 +72,7 @@ function LeftMenu() {
           </li>
           <li
             className={`menu-item ${collapsedClass} ${activeMenuItem === "historico" ? "active" : ""}`}
-            onClick={() => navigateTo("/historico")}
+            onClick={() => navigateTo("/history")}
           >
             <FontAwesomeIcon
               icon={faHistory}

@@ -3,6 +3,7 @@ import LeftMenu from "./components/LeftMenu";
 import Header from "./components/Header";
 import ProtectedRoute from "./ProtectedRoute";
 import Dashboard from "./Pages/Dashboard";
+import HistoryPage from "./Pages/HistoryPage";
 
 function App() {
   const location = useLocation(); // Obtiene la ubicación actual
@@ -28,6 +29,10 @@ function App() {
           <Route
             path="/lecturas"
             element={<ProtectedRoute element={Dashboard} />}
+          />
+          <Route
+            path="/history"
+            element={<ProtectedRoute element={HistoryPage} />}
           />
           <Route path="*" element={<Navigate to="/lecturas" />} />
         </Routes>

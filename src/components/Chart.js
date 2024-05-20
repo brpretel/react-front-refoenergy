@@ -71,32 +71,61 @@ function Chart(props) {
   const [average, setAverage] = useState(null);
   const [last, setLast] = useState(null);
   useEffect(() => {
-    fetch("https://refoenergyean-production.up.railway.app/temperature_sensor/show_all_temperatures/", {
-      method: "GET",
-      headers: {
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        const temperatures = data.map(row => parseFloat(row.temperature));
-        const sum = temperatures.reduce((total, currentValue) => total + currentValue, 0);
-        const averaget = sum / temperatures.length;
-        setLast(temperatures[temperatures.length - 1]);
-        setAverage(averaget);
-        const info = {
-          labels: data.map(row => row.creation_date),
-          datasets: [{
-            label: props.type,
-            data: data.map(row => row.temperature),
-            borderWidth: 1,
-            backgroundColor: props.color,
-            borderColor: props.color
-          }]
-        };
-        setData(info);
-        console.log(data);
+    if(props.type==='temperature'){
+      fetch("https://refoenergyean-production.up.railway.app/temperature_sensor/show_all_temperatures/", {
+        method: "GET",
+        headers: {
+        },
       })
-      .catch((error) => console.log(error));
+        .then((response) => response.json())
+        .then((data) => {
+          const temperatures = data.map(row => parseFloat(row.temperature));
+          const sum = temperatures.reduce((total, currentValue) => total + currentValue, 0);
+          const averaget = sum / temperatures.length;
+          setLast(temperatures[temperatures.length - 1]);
+          setAverage(averaget);
+          const info = {
+            labels: data.map(row => row.creation_date),
+            datasets: [{
+              label: props.type,
+              data: data.map(row => row.temperature),
+              borderWidth: 1,
+              backgroundColor: props.color,
+              borderColor: props.color
+            }]
+          };
+          setData(info);
+          console.log(data);
+        })
+        .catch((error) => console.log(error));
+    }else{
+      fetch("https://refoenergyean-production.up.railway.app/weight_sensor/show_all_weights/", {
+        method: "GET",
+        headers: {
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          const temperatures = data.map(row => parseFloat(row.weight));
+          const sum = temperatures.reduce((total, currentValue) => total + currentValue, 0);
+          const averaget = sum / temperatures.length;
+          setLast(temperatures[temperatures.length - 1]);
+          setAverage(averaget);
+          const info = {
+            labels: data.map(row => row.creation_date),
+            datasets: [{
+              label: props.type,
+              data: data.map(row => row.weight),
+              borderWidth: 1,
+              backgroundColor: props.color,
+              borderColor: props.color
+            }]
+          };
+          setData(info);
+          console.log(data);
+        })
+        .catch((error) => console.log(error));
+    }
   }, [props.color, props.type]);
   return (
     <div className="flex-container">
