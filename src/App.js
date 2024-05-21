@@ -4,15 +4,16 @@ import Header from "./components/Header";
 import ProtectedRoute from "./ProtectedRoute";
 import Dashboard from "./Pages/Dashboard";
 import HistoryPage from "./Pages/HistoryPage";
+import Configuration from "./Pages/Configuration";
 
 function App() {
   const location = useLocation(); // Obtiene la ubicación actual
-  const showMenuAndHeader = location.pathname !== "/Login";
+  const showMenuAndHeader = location.pathname !== "/login";
 
   // Función para obtener el título de la página actual
   const getPageTitle = (pathname) => {
     const path = pathname.split("/").filter(Boolean);
-    const rawTitle = path.length > 0 ? path[path.length - 1] : "Leturas";
+    const rawTitle = path.length > 0 ? path[path.length - 1] : "leturas";
     return rawTitle.charAt(0).toUpperCase() + rawTitle.slice(1);
   };
 
@@ -31,9 +32,14 @@ function App() {
             element={<ProtectedRoute element={Dashboard} />}
           />
           <Route
-            path="/history"
-            element={<ProtectedRoute element={HistoryPage} />}
+            path="/configuracion"
+            element={<ProtectedRoute element={Configuration} />}
           />
+          <Route
+            path="/historico"
+            element={<ProtectedRoute element={HistoryPage} />}s
+          />
+          
           <Route path="*" element={<Navigate to="/lecturas" />} />
         </Routes>
       </div>

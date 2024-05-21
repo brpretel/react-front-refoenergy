@@ -5,7 +5,7 @@ function Dashboard() {
   return (
     <div className="dashboard-layout">
       <div className="graph-container">
-        <Chart type="moisture" color="#0cb14a"/>
+        <Chart type="humidity" color="#0cb14a"/>
       </div>
       <div className="graph-container">
         <Chart type="weight" color="#ff9100"/>

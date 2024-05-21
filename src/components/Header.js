@@ -11,6 +11,7 @@ function Header({ title }) {
   const logout = () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('username');
+    localStorage.removeItem('activeMenuItem');
     navigate("/login");
   };
 
