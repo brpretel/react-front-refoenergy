@@ -81,10 +81,10 @@ function Users() {
       <h1>Gestor de Usuarios</h1>
       <br />
       <div className="filter-buttons">
-        <button onClick={() => setFilter("all")}>All</button>
-        <button onClick={() => setFilter("pending")}>Pending</button>
-        <button onClick={() => setFilter("active")}>Active</button>
-        <button onClick={() => setFilter("inactive")}>Inactive</button>
+        <button onClick={() => setFilter("all")}>Todos</button>
+        <button onClick={() => setFilter("pending")}>Pendiente</button>
+        <button onClick={() => setFilter("active")}>Activo</button>
+        <button onClick={() => setFilter("inactive")}>Inactivo</button>
       </div>
       <br />
       <div className="user-section">
