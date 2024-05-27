@@ -58,6 +58,7 @@
   padding: 2px;
   cursor: pointer;
   padding-left: 20%;
+  margin-bottom: 10px; /* Adjust this value to add more space */
 }
 
 .text-menu span {
@@ -74,13 +75,15 @@
   color: black;
 }
 
-.menu-item.active, .menu-item:hover {
+.menu-item.active,
+.menu-item:hover {
   border-radius: 10px;
   background-color: orange;
   color: black;
 }
 
-.menu-item.active svg, .menu-item:hover svg {
+.menu-item.active svg,
+.menu-item:hover svg {
   color: black;
 }
 
@@ -106,7 +109,7 @@
   padding: 0px 20px 10px 20px;
 }
 
-.ft-ico{
+.ft-ico {
   font-size: 25px;
 }
 
@@ -130,7 +133,6 @@
   margin: 0; /* Elimina los márgenes para evitar espacios entre elementos */
 }
 
-
 @media (max-width: 768px) {
   /*COLLAPSED MENU*/
   .left-menu.collapsed {
@@ -151,7 +153,6 @@
     width: auto;
     padding: 10px 0px 20px 0px;
   }
-
 
   .profile-card-info.collapsed {
     align-items: start;
@@ -180,7 +181,7 @@
     background-color: transparent;
   }
 
-  .ft-ico.collapsed{
+  .ft-ico.collapsed {
     display: none;
   }
 }

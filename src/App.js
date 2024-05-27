@@ -4,7 +4,8 @@ import Header from "./components/Header";
 import ProtectedRoute from "./ProtectedRoute";
 import Dashboard from "./Pages/Dashboard";
 import HistoryPage from "./Pages/HistoryPage";
-import Configuration from "./Pages/Configuration";
+import Users from "./Pages/Users";
+import Sensor from "./Pages/Sensor";
 
 function App() {
   const location = useLocation(); // Obtiene la ubicación actual
@@ -32,14 +33,20 @@ function App() {
             element={<ProtectedRoute element={Dashboard} />}
           />
           <Route
-            path="/configuracion"
-            element={<ProtectedRoute element={Configuration} />}
+            path="/usuarios"
+            element={<ProtectedRoute element={Users} />}
           />
           <Route
             path="/historico"
-            element={<ProtectedRoute element={HistoryPage} />}s
+            element={<ProtectedRoute element={HistoryPage} />}
+            s
           />
-          
+          <Route
+            path="/sensores"
+            element={<ProtectedRoute element={Sensor} />}
+            s
+          />
+
           <Route path="*" element={<Navigate to="/lecturas" />} />
         </Routes>
       </div>

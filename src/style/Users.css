@@ -1,0 +1,65 @@
+.dashboard-layout {
+  padding: 20px;
+  margin-top: 20px;
+  background-color: #f9f9f9;
+  font-family: Arial, sans-serif;
+}
+
+.user-list {
+  list-style: none;
+  padding: 0;
+}
+
+.user-item {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.user-item p {
+  margin: 5px 0;
+  color: #333;
+}
+
+h1 {
+  color: #333;
+}
+
+.status-dropdown,
+button {
+  padding: 8px 12px;
+  margin-left: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+button {
+  background-color: #4caf50; /* Green */
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.status-dropdown {
+  cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  .user-config-selector {
+    width: 30%;
+  }
+
+  .status-dropdown {
+    margin-bottom: 8px;
+  }
+}
