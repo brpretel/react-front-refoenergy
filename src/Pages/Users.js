@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "../style/Users.css";
 
 function Users() {
@@ -6,22 +6,17 @@ function Users() {
   const [filter, setFilter] = useState("all");
   const [selectedStatuses, setSelectedStatuses] = useState({});
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const API_URL = process.env.REACT_APP_API_URL;
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
-      const response = await fetch(
-        "https://refoenergyean-production.up.railway.app/admin/show_all_users/",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        }
-      );
+      const response = await fetch(`${API_URL}/admin/show_all_users/`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
       const data = await response.json();
       if (Array.isArray(data)) {
         setUsers(data);
@@ -37,12 +32,14 @@ function Users() {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  };
+  }, [API_URL]); // `fetchData` will only change if `API_URL` changes
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]); // Add `fetchData` to the dependency array
 
   const handleStatusChange = async (user, newStatus) => {
-    const url = new URL(
-      `https://refoenergyean-production.up.railway.app/admin/update_user_status/${user.id}`
-    );
+    const url = new URL(`${API_URL}/admin/update_user_status/${user.id}`);
     url.searchParams.append("status", newStatus);
 
     console.log(`URL: ${url.toString()}`);

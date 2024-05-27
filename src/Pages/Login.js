@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faLock, faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import logoRefoEnergy from "../logos/logo-refoenergy.png"
+import logoRefoEnergy from "../logos/logo-refoenergy.png";
 import "../style/login.css"; // Asegúrate de que la ruta es correcta
 
 function Login() {
@@ -13,16 +13,24 @@ function Login() {
     setMode(mode === newMode ? "" : newMode);
   };
 
-  async function handleRegister(username, password) {
+  const API_URL = process.env.REACT_APP_API_URL;
+
+  async function handleRegister(username, password, email, user_vertical) {
     try {
-      const response = await axios.post("https://refoenergyean-production.up.railway.app/auth/register", {
-        headers: {
-          "Content-Type": "application/json",
+      const response = await axios.post(
+        `${API_URL}/auth/register`,
+        {
+          username,
+          password,
+          email,
+          user_vertical,
         },
-        username,
-        password,
-        body: JSON.stringify(username, password),
-      });
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       console.log(response.data);
       localStorage.setItem("access_token", response.data.access_token); // Maneja la respuesta aquí
       alert("Usuario creado con éxito. Por favor, inicia sesión.");
@@ -34,12 +42,16 @@ function Login() {
 
   async function handleLogin(username, password) {
     try {
-      const response = await axios.post("https://refoenergyean-production.up.railway.app/auth/login", {
-        username,
-        password
-      }, {
-        withCredentials: true // Añade esta línea para enviar las cookies con la solicitud
-      });
+      const response = await axios.post(
+        `${API_URL}/auth/login`,
+        {
+          username,
+          password,
+        },
+        {
+          withCredentials: true, // Añade esta línea para enviar las cookies con la solicitud
+        }
+      );
       console.log(response.data); // Maneja la respuesta aquí
       localStorage.setItem("access_token", response.data.access_token);
       localStorage.setItem("username", username);
@@ -50,25 +62,22 @@ function Login() {
   }
 
   function checkPasswordMatch() {
-    var password = document.getElementById("password").value;
-    var confirmPassword = document.getElementById("password2").value;
-    var message = document.getElementById("passwordMatchMessage");
-    var SignUpButton = document.getElementById("SignUpButton");
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("password2").value;
+    const message = document.getElementById("passwordMatchMessage");
+    const signUpButton = document.getElementById("SignUpButton");
 
     if (password === confirmPassword) {
-      message.innerHTML = "Passwords match!";
-      SignUpButton.disable = false;
+      message.innerHTML = "¡Las contraseñas coinciden!";
+      signUpButton.disabled = false;
     } else {
-      message.innerHTML = "Passwords do not match!";
-      SignUpButton.disable = true;
+      message.innerHTML = "¡Las contraseñas no coinciden!";
+      signUpButton.disabled = true;
     }
   }
 
-
   return (
-
     <div className={`login-container ${mode}`}>
-
       <div className="signin-signup">
         {/* Formulario de Inicio de Sesión */}
         <form
@@ -85,18 +94,23 @@ function Login() {
           <h2 className="title">Iniciar Sesión</h2>
           <div className="input-field">
             <FontAwesomeIcon icon={faUser} />
-            <input name="username" type="text" placeholder="Usuario" />
+            <input name="username" type="text" placeholder="Usuario" required />
           </div>
           <div className="input-field">
             <FontAwesomeIcon icon={faLock} />
-            <input name="password" type="password" placeholder="Contraseña" />
+            <input
+              name="password"
+              type="password"
+              placeholder="Contraseña"
+              required
+            />
           </div>
           <input type="submit" value="Iniciar" className="btn" />
 
           <p className="account-text">
-            Don't have an account?{" "}
-            <a href="https://www.google.com/?hl=es" onClick={() => toggleMode("sign-up-mode")}>
-              Sign up
+            ¿No tienes una cuenta?{" "}
+            <a href="#!" onClick={() => toggleMode("sign-up-mode")}>
+              Regístrate
             </a>
           </p>
         </form>
@@ -110,6 +124,7 @@ function Login() {
             handleRegister(
               formData.get("username"),
               formData.get("password"),
+              formData.get("email"),
               formData.get("user_vertical")
             );
           }}
@@ -118,15 +133,9 @@ function Login() {
             <img src={logoRefoEnergy} alt="RefoEnergy Logo" />
           </div>
           <h2 className="title">Registro de usuarios</h2>
-
           <div className="input-field">
             <FontAwesomeIcon icon={faUser} />
-            <input
-              name="username"
-              type="text"
-              placeholder="Usuario"
-              required
-            />
+            <input name="username" type="text" placeholder="Usuario" required />
           </div>
           <div className="input-field">
             <FontAwesomeIcon icon={faEnvelope} />
@@ -149,11 +158,12 @@ function Login() {
           </div>
           <div className="input-field">
             <FontAwesomeIcon icon={faLock} />
-            <input onChange={checkPasswordMatch}
+            <input
               id="password2"
               name="password2"
               type="password"
               placeholder="Confirmar Contraseña"
+              onChange={checkPasswordMatch}
               required
             />
             <span id="passwordMatchMessage"></span>
@@ -168,9 +178,12 @@ function Login() {
               <option value="Payment">Departamento 4</option>
             </select>
           </div>
-          <input type="submit" value="Sign up" className="btn" id="SignUpButton" />
-
-
+          <input
+            type="submit"
+            value="Registrarse"
+            className="btn"
+            id="SignUpButton"
+          />
         </form>
       </div>
 
@@ -178,27 +191,28 @@ function Login() {
         {/* Panel Izquierdo */}
         <div className="panel left-panel">
           <div className="content">
-            <h3>¿Ya tiene una cuenta?</h3>
-            <p>Por favor use sus credenciales para inciar sesión</p>
+            <h3>¿Ya tienes una cuenta?</h3>
+            <p>Por favor, usa tus credenciales para iniciar sesión</p>
             <button className="btn" onClick={() => toggleMode("sign-in-mode")}>
               Iniciar sesión
             </button>
           </div>
-          <img src="signin.svg" alt="" className="image" />
+          <img src="signin.svg" alt="Iniciar sesión" className="image" />
         </div>
 
         {/* Panel Derecho */}
         <div className="panel right-panel">
           <div className="content">
-            <h3>¿Necesita registrarse?</h3>
+            <h3>¿Necesitas registrarte?</h3>
             <p>
-              Por favor contacte a su administrador o cree una cuenta con sus credenciales corporativas
+              Por favor, contacta a tu administrador o crea una cuenta con tus
+              credenciales corporativas
             </p>
             <button className="btn" onClick={() => toggleMode("sign-up-mode")}>
               Registrarse
             </button>
           </div>
-          <img src="signup.svg" alt="" className="image" />
+          <img src="signup.svg" alt="Registrarse" className="image" />
         </div>
       </div>
     </div>
