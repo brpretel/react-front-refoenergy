@@ -48,16 +48,16 @@ const options = {
   },
 };
 
-function Chart(props) {
+function Chart({ type, color, isMounted }) {
   let title = "";
   let design = "";
   let unit = "";
 
-  if (props.type === "temperature") {
+  if (type === "temperature") {
     title = "Temperatura";
     design = "temperature-box";
     unit = " °C";
-  } else if (props.type === "weight") {
+  } else if (type === "weight") {
     title = "Peso";
     design = "weight-box";
     unit = " Kg";
@@ -73,6 +73,8 @@ function Chart(props) {
   const socketRef = useRef(null);
 
   useEffect(() => {
+    if (!isMounted) return;
+
     const connectWebSocket = (url) => {
       socketRef.current = new WebSocket(url);
 
@@ -83,8 +85,26 @@ function Chart(props) {
       socketRef.current.onmessage = (event) => {
         console.log("Received message from WebSocket");
         const newData = JSON.parse(event.data);
-        console.log("Data received from WebSocket:", newData); // Print received data
-        const values = newData.map((row) => parseFloat(row[props.type]));
+        console.log("Data received from WebSocket:", newData);
+
+        const groupedData = newData.reduce((acc, row) => {
+          const date = row.creation_date;
+          if (!acc[date]) {
+            acc[date] = [];
+          }
+          acc[date].push(parseFloat(row[type]));
+          return acc;
+        }, {});
+
+        const labels = Object.keys(groupedData);
+        const values = labels.map((date) => {
+          const sum = groupedData[date].reduce(
+            (total, currentValue) => total + currentValue,
+            0
+          );
+          return sum / groupedData[date].length;
+        });
+
         const sum = values.reduce(
           (total, currentValue) => total + currentValue,
           0
@@ -94,14 +114,14 @@ function Chart(props) {
         setAverage(averageValue);
 
         const info = {
-          labels: newData.map((row) => row.creation_date),
+          labels: labels,
           datasets: [
             {
-              label: props.type,
+              label: type,
               data: values,
               borderWidth: 1,
-              backgroundColor: props.color,
-              borderColor: props.color,
+              backgroundColor: color,
+              borderColor: color,
             },
           ],
         };
@@ -119,80 +139,29 @@ function Chart(props) {
           );
         } else {
           console.log("Connection died, attempting to reconnect...");
-          setTimeout(() => connectWebSocket(url), 1000); // Reconnect after 1 second
+          setTimeout(() => connectWebSocket(url), 1000);
         }
       };
     };
 
-    if (props.type === "weight") {
-      connectWebSocket(
-        `wss://refoenergyean-production.up.railway.app/weight_sensor/ws/weight`
-      );
-    } else if (props.type === "temperature") {
-      connectWebSocket(
-        `wss://refoenergyean-production.up.railway.app/temperature_sensor/ws/temperature`
-      );
-    } else if (props.type === "humidity") {
-      connectWebSocket(
-        `wss://refoenergyean-production.up.railway.app/humidity_sensor/ws/humidity`
-      );
+    const urls = {
+      weight:
+        "wss://refoenergyean-production.up.railway.app/weight_sensor/ws/weight",
+      temperature:
+        "wss://refoenergyean-production.up.railway.app/temperature_sensor/ws/temperature",
+      humidity:
+        "wss://refoenergyean-production.up.railway.app/humidity_sensor/ws/humidity",
+    };
+
+    if (type in urls) {
+      connectWebSocket(urls[type]);
     }
 
     return () => {
       console.log("Closing WebSocket connection");
       if (socketRef.current) socketRef.current.close();
     };
-  }, [props.color, props.type]);
-
-  useEffect(() => {
-    if (
-      props.type !== "weight" &&
-      props.type !== "temperature" &&
-      props.type !== "humidity"
-    ) {
-      let endpoint = "";
-
-      if (props.type === "temperature") {
-        endpoint =
-          "https://refoenergyean-production.up.railway.app/temperature_sensor/show_all_temperatures/";
-      } else if (props.type === "humidity") {
-        endpoint =
-          "https://refoenergyean-production.up.railway.app/humidity_sensor/show_all_humidities/";
-      }
-
-      fetch(endpoint, {
-        method: "GET",
-        headers: {},
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Data received from HTTP endpoint:", data); // Print received data
-          const values = data.map((row) => parseFloat(row[props.type]));
-          const sum = values.reduce(
-            (total, currentValue) => total + currentValue,
-            0
-          );
-          const averageValue = sum / values.length;
-          setLast(values[values.length - 1]);
-          setAverage(averageValue);
-
-          const info = {
-            labels: data.map((row) => row.creation_date),
-            datasets: [
-              {
-                label: props.type,
-                data: values,
-                borderWidth: 1,
-                backgroundColor: props.color,
-                borderColor: props.color,
-              },
-            ],
-          };
-          setData(info);
-        })
-        .catch((error) => console.log(error));
-    }
-  }, [props.color, props.type]);
+  }, [color, type, isMounted]);
 
   return (
     <div className="flex-container">
