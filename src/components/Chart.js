@@ -39,7 +39,7 @@ const options = {
   },
   scales: {
     y: {
-      stacked: true,
+      stacked: false, // Cambiar a false para permitir múltiples puntos
       beginAtZero: true,
     },
     x: {
@@ -87,43 +87,46 @@ function Chart({ type, color, isMounted }) {
         const newData = JSON.parse(event.data);
         console.log("Data received from WebSocket:", newData);
 
-        const groupedData = newData.reduce((acc, row) => {
-          const date = row.creation_date;
-          if (!acc[date]) {
-            acc[date] = [];
+        const groupedData = {};
+        newData.forEach((row) => {
+          const date = row.creation_date.split(" ")[0]; // Obtener solo la fecha
+          if (!groupedData[date]) {
+            groupedData[date] = [];
           }
-          acc[date].push(parseFloat(row[type]));
-          return acc;
-        }, {});
-
-        const labels = Object.keys(groupedData);
-        const values = labels.map((date) => {
-          const sum = groupedData[date].reduce(
-            (total, currentValue) => total + currentValue,
-            0
-          );
-          return sum / groupedData[date].length;
+          groupedData[date].push(parseFloat(row[type]));
         });
 
-        const sum = values.reduce(
+        const labels = Object.keys(groupedData);
+        const datasets = [];
+        labels.forEach((label) => {
+          groupedData[label].forEach((value, index) => {
+            if (!datasets[index]) {
+              datasets[index] = {
+                label: `${type} ${index + 1}`,
+                data: [],
+                borderWidth: 1,
+                backgroundColor: color,
+                borderColor: color,
+                showLine: false, //  mostrar solo los puntos
+                pointRadius: 4, // tamaño del punto
+              };
+            }
+            datasets[index].data.push({ x: label, y: value });
+          });
+        });
+
+        const allValues = Object.values(groupedData).flat();
+        const sum = allValues.reduce(
           (total, currentValue) => total + currentValue,
           0
         );
-        const averageValue = sum / values.length;
-        setLast(values[values.length - 1]);
+        const averageValue = sum / allValues.length;
+        setLast(allValues[allValues.length - 1]);
         setAverage(averageValue);
 
         const info = {
           labels: labels,
-          datasets: [
-            {
-              label: type,
-              data: values,
-              borderWidth: 1,
-              backgroundColor: color,
-              borderColor: color,
-            },
-          ],
+          datasets: datasets,
         };
         setData(info);
       };
