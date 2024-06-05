@@ -40,7 +40,7 @@ function SensorPopup({ onClose, onSensorAdded }) {
         }
       );
       console.log(response.data);
-      alert("Sensor Agregado");
+      alert("Sensor Agregado!!");
       onSensorAdded(); // Call the function to refresh the sensor list
       onClose();
     } catch (error) {
