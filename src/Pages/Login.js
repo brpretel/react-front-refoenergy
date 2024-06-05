@@ -197,7 +197,6 @@ function Login() {
               Iniciar sesión
             </button>
           </div>
-          <img src="signin.svg" alt="Iniciar sesión" className="image" />
         </div>
 
         {/* Panel Derecho */}
@@ -212,7 +211,6 @@ function Login() {
               Registrarse
             </button>
           </div>
-          <img src="signup.svg" alt="Registrarse" className="image" />
         </div>
       </div>
     </div>

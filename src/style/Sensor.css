@@ -47,6 +47,14 @@ button:hover {
   cursor: pointer;
 }
 
+.crear-sensor-button {
+  background-color: red;
+}
+
+.crear-sensor-button:hover {
+  background-color: darkred;
+}
+
 @media (max-width: 700px) {
   .sensor-config-selector {
     width: 30%;
@@ -54,5 +62,9 @@ button:hover {
 
   .status-dropdown {
     margin-bottom: 8px;
+  }
+
+  .crear-sensor-button {
+    margin-top: 10px;
   }
 }

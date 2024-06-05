@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "../style/Sensor.css";
+import SensorPopup from "../components/Sensor-Popup";
 
 function Sensor() {
   const [sensors, setSensors] = useState([]);
   const [filter, setFilter] = useState("all");
   const [selectedStatuses, setSelectedStatuses] = useState({});
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const API_URL = process.env.REACT_APP_API_URL;
 
@@ -32,11 +34,11 @@ function Sensor() {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  }, [API_URL]); // `fetchData` will only change if `API_URL` changes
+  }, [API_URL]);
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]); // Add `fetchData` to the dependency array
+  }, [fetchData]);
 
   const handleStatusChange = async (sensor, newStatus) => {
     const url = new URL(`${API_URL}/admin/sensor/${sensor.id}`);
@@ -82,6 +84,12 @@ function Sensor() {
         <button onClick={() => setFilter("pending")}>Pendiente</button>
         <button onClick={() => setFilter("active")}>Activo</button>
         <button onClick={() => setFilter("inactive")}>Inactivo</button>
+        <button
+          className="crear-sensor-button"
+          onClick={() => setIsPopupOpen(true)}
+        >
+          Crear Sensor
+        </button>
       </div>
       <br />
       <div className="sensor-section">
@@ -130,6 +138,12 @@ function Sensor() {
           )}
         </ul>
       </div>
+      {isPopupOpen && (
+        <SensorPopup
+          onClose={() => setIsPopupOpen(false)}
+          onSensorAdded={fetchData} // Pass the fetchData function as a prop
+        />
+      )}
     </div>
   );
 }
