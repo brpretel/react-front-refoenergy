@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "../style/Users.css";
+import axios from "axios";
 
 function Users() {
   const [users, setUsers] = useState([]);
@@ -10,14 +11,15 @@ function Users() {
 
   const fetchData = useCallback(async () => {
     try {
-      const response = await fetch(`${API_URL}/admin/show_all_users/`, {
-        method: "GET",
+      const token = localStorage.getItem("access_token"); // Obtener token del almacenamiento local
+      const response = await axios.get(`${API_URL}/admin/show_all_users/`, {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Agregar el token de autenticación
         },
-        credentials: "include",
+        withCredentials: true, // Incluir credenciales en la solicitud
       });
-      const data = await response.json();
+      const data = response.data;
       if (Array.isArray(data)) {
         setUsers(data);
         setSelectedStatuses(
@@ -31,6 +33,23 @@ function Users() {
       }
     } catch (error) {
       console.error("Error fetching data:", error);
+      if (error.response) {
+        console.error("Error data:", error.response.data);
+        console.error("Error status:", error.response.status);
+        console.error("Error headers:", error.response.headers);
+        if (error.response.status === 401) {
+          alert("Session expired. Please log in again.");
+          // Redirigir al login o manejar de otra manera
+        } else {
+          alert(
+            `Error al obtener los datos: ${
+              error.response.data.message || "Error desconocido"
+            }`
+          );
+        }
+      } else {
+        alert("Failed to fetch data. Network error or server is down.");
+      }
     }
   }, [API_URL]); // `fetchData` will only change if `API_URL` changes
 

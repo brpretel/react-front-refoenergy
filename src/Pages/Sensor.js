@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "../style/Sensor.css";
+import axios from "axios";
 import SensorPopup from "../components/Sensor-Popup";
 
 function Sensor() {
@@ -40,28 +41,48 @@ function Sensor() {
     fetchData();
   }, [fetchData]);
 
-  const handleStatusChange = async (sensor, newStatus) => {
-    const url = new URL(`${API_URL}/admin/sensor/${sensor.id}`);
-    url.searchParams.append("status", newStatus);
-
-    console.log(`URL: ${url.toString()}`);
+  async function handleStatusChange(sensor, newStatus) {
     try {
-      const response = await fetch(url.toString(), {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
-      if (response.ok) {
+      const token = localStorage.getItem("access_token"); // Obtener token del almacenamiento local
+      const response = await axios.put(
+        `${API_URL}/admin/sensor/${sensor.id}`,
+        { status: newStatus },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Agregar el token de autenticación
+          },
+          withCredentials: true, // Incluir credenciales en la solicitud
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("Status updated successfully:", response.data);
         fetchData();
       } else {
-        console.error("Failed to update status:", await response.text());
+        console.error("Failed to update status:", response.data);
       }
     } catch (error) {
       console.error("Error updating status:", error);
+      if (error.response) {
+        console.error("Error data:", error.response.data);
+        console.error("Error status:", error.response.status);
+        console.error("Error headers:", error.response.headers);
+        if (error.response.status === 401) {
+          alert("Session expired. Please log in again.");
+          // Redirigir al login o manejar de otra manera
+        } else {
+          alert(
+            `Error al actualizar el estado: ${
+              error.response.data.message || "Error desconocido"
+            }`
+          );
+        }
+      } else {
+        alert("Failed to update status. Network error or server is down.");
+      }
     }
-  };
+  }
 
   const handleSelectChange = (sensorId, value) => {
     setSelectedStatuses((prevStatuses) => ({

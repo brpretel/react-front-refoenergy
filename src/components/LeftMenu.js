@@ -8,11 +8,14 @@ import {
   faHistory,
   faCamera,
   faPerson,
+  faUpload,
 } from "@fortawesome/free-solid-svg-icons";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import axios from "axios";
 
 function LeftMenu() {
-  // Initialize from localStorage or default to "/lecturas"
+  const API_URL = process.env.REACT_APP_API_URL;
+
   const initialActiveItem =
     localStorage.getItem("activeMenuItem") || "/lecturas";
   const [isExpanded, setIsExpanded] = useState(false);
@@ -20,7 +23,8 @@ function LeftMenu() {
   const navigate = useNavigate();
   const username = localStorage.getItem("username");
 
-  // Update localStorage when activeMenuItem changes
+  const fileInputRef = useRef(null);
+
   useEffect(() => {
     localStorage.setItem("activeMenuItem", activeMenuItem);
   }, [activeMenuItem]);
@@ -37,6 +41,55 @@ function LeftMenu() {
   const navigateTo = (path) => {
     setActiveMenuItem(path);
     navigate(path);
+  };
+
+  async function handleFileChange(event) {
+    event.preventDefault();
+    const file = event.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const token = localStorage.getItem("access_token"); // Obtener token del almacenamiento local
+        const response = await axios.post(
+          `${API_URL}/admin/upload-csv`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`, // Agregar el token de autenticación
+            },
+            withCredentials: true, // Incluir credenciales en la solicitud
+          }
+        );
+        console.log("Archivo procesado correctamente:", response.data);
+        alert("Archivo procesado correctamente");
+      } catch (error) {
+        console.error("Error al procesar el archivo:", error);
+        if (error.response) {
+          console.error("Error data:", error.response.data);
+          console.error("Error status:", error.response.status);
+          console.error("Error headers:", error.response.headers);
+          if (error.response.status === 401) {
+            alert("Session expired. Please log in again.");
+            // Redirigir al login o manejar de otra manera
+          } else {
+            alert(
+              `Error al procesar el archivo: ${
+                error.response.data.message || "Error desconocido"
+              }`
+            );
+          }
+        } else {
+          alert("Failed to process file. Network error or server is down.");
+        }
+      }
+    }
+  }
+
+  const handleUploadClick = () => {
+    fileInputRef.current.click();
   };
 
   return (
@@ -106,6 +159,26 @@ function LeftMenu() {
             />
             <div className={`text-menu ${collapsedClass}`}>
               <span>Sensores</span>
+            </div>
+          </li>
+          <li
+            className={`menu-item ${collapsedClass}`}
+            onClick={handleUploadClick}
+          >
+            <FontAwesomeIcon
+              icon={faUpload}
+              className={`menu-ico ${collapsedClass}`}
+            />
+            <div className={`text-menu ${collapsedClass}`}>
+              <span>Cargar Datos</span>
+              <input
+                type="file"
+                accept=".csv"
+                style={{ display: "none" }}
+                id="file-upload"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+              />
             </div>
           </li>
         </ul>

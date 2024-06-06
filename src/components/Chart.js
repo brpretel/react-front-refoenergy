@@ -39,7 +39,7 @@ const options = {
   },
   scales: {
     y: {
-      stacked: false, // Cambiar a false para permitir múltiples puntos
+      stacked: false,
       beginAtZero: true,
     },
     x: {
@@ -87,41 +87,35 @@ function Chart({ type, color, isMounted }) {
         const newData = JSON.parse(event.data);
         console.log("Data received from WebSocket:", newData);
 
-        const groupedData = {};
-        newData.forEach((row) => {
-          const date = row.creation_date.split(" ")[0]; // Obtener solo la fecha
-          if (!groupedData[date]) {
-            groupedData[date] = [];
-          }
-          groupedData[date].push(parseFloat(row[type]));
-        });
+        let labels = newData.map((row) => row.creation_date);
+        let values = newData.map((row) => parseFloat(row[type]));
 
-        const labels = Object.keys(groupedData);
-        const datasets = [];
-        labels.forEach((label) => {
-          groupedData[label].forEach((value, index) => {
-            if (!datasets[index]) {
-              datasets[index] = {
-                label: `${type} ${index + 1}`,
-                data: [],
-                borderWidth: 1,
-                backgroundColor: color,
-                borderColor: color,
-                showLine: false, //  mostrar solo los puntos
-                pointRadius: 4, // tamaño del punto
-              };
-            }
-            datasets[index].data.push({ x: label, y: value });
-          });
-        });
+        if (labels.length > 10) {
+          labels = labels.slice(-10);
+          values = values.slice(-10);
+        }
 
-        const allValues = Object.values(groupedData).flat();
-        const sum = allValues.reduce(
+        const datasets = [
+          {
+            label: `${type}`,
+            data: values.map((value, index) => ({
+              x: labels[index],
+              y: value,
+            })),
+            borderWidth: 1,
+            backgroundColor: color,
+            borderColor: color,
+            showLine: true,
+            pointRadius: 4,
+          },
+        ];
+
+        const sum = values.reduce(
           (total, currentValue) => total + currentValue,
           0
         );
-        const averageValue = sum / allValues.length;
-        setLast(allValues[allValues.length - 1]);
+        const averageValue = sum / values.length;
+        setLast(values[values.length - 1]);
         setAverage(averageValue);
 
         const info = {
