@@ -15,15 +15,23 @@ import axios from "axios";
 
 function LeftMenu() {
   const API_URL = process.env.REACT_APP_API_URL;
-
   const initialActiveItem =
     localStorage.getItem("activeMenuItem") || "/lecturas";
   const [isExpanded, setIsExpanded] = useState(false);
   const [activeMenuItem, setActiveMenuItem] = useState(initialActiveItem);
   const navigate = useNavigate();
   const username = localStorage.getItem("username");
+  const token = localStorage.getItem("access_token");
 
   const fileInputRef = useRef(null);
+
+  const getUserRoleFromToken = () => {
+    if (!token) return null;
+    const decodedToken = JSON.parse(atob(token.split(".")[1]));
+    return decodedToken.user_role;
+  };
+
+  const userRole = getUserRoleFromToken();
 
   useEffect(() => {
     localStorage.setItem("activeMenuItem", activeMenuItem);
@@ -51,16 +59,16 @@ function LeftMenu() {
       formData.append("file", file);
 
       try {
-        const token = localStorage.getItem("access_token"); // Obtener token del almacenamiento local
+        const token = localStorage.getItem("access_token");
         const response = await axios.post(
           `${API_URL}/admin/upload-csv`,
           formData,
           {
             headers: {
               "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`, // Agregar el token de autenticación
+              Authorization: `Bearer ${token}`,
             },
-            withCredentials: true, // Incluir credenciales en la solicitud
+            withCredentials: true,
           }
         );
         console.log("Archivo procesado correctamente:", response.data);
@@ -73,7 +81,6 @@ function LeftMenu() {
           console.error("Error headers:", error.response.headers);
           if (error.response.status === 401) {
             alert("Session expired. Please log in again.");
-            // Redirigir al login o manejar de otra manera
           } else {
             alert(
               `Error al procesar el archivo: ${
@@ -133,20 +140,22 @@ function LeftMenu() {
           </li>
         </ul>
         <ul className={`menu-items2 ${collapsedClass}`}>
-          <li
-            className={`menu-item ${collapsedClass} ${
-              activeMenuItem === "/usuarios" ? "active" : ""
-            }`}
-            onClick={() => navigateTo("/usuarios")}
-          >
-            <FontAwesomeIcon
-              icon={faPerson}
-              className={`menu-ico ${collapsedClass}`}
-            />
-            <div className={`text-menu ${collapsedClass}`}>
-              <span>Usuarios</span>
-            </div>
-          </li>
+          {["master", "admin"].includes(userRole) && (
+            <li
+              className={`menu-item ${collapsedClass} ${
+                activeMenuItem === "/usuarios" ? "active" : ""
+              }`}
+              onClick={() => navigateTo("/usuarios")}
+            >
+              <FontAwesomeIcon
+                icon={faPerson}
+                className={`menu-ico ${collapsedClass}`}
+              />
+              <div className={`text-menu ${collapsedClass}`}>
+                <span>Usuarios</span>
+              </div>
+            </li>
+          )}
           <li
             className={`menu-item ${collapsedClass} ${
               activeMenuItem === "/sensores" ? "active" : ""

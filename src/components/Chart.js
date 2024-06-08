@@ -141,13 +141,12 @@ function Chart({ type, color, isMounted }) {
       };
     };
 
+    const WS_BASE_URL = process.env.REACT_APP_WS_BASE_URL;
+
     const urls = {
-      weight:
-        "wss://refoenergyean-production.up.railway.app/weight_sensor/ws/weight",
-      temperature:
-        "wss://refoenergyean-production.up.railway.app/temperature_sensor/ws/temperature",
-      humidity:
-        "wss://refoenergyean-production.up.railway.app/humidity_sensor/ws/humidity",
+      weight: `${WS_BASE_URL}/weight_sensor/ws/weight`,
+      temperature: `${WS_BASE_URL}/temperature_sensor/ws/temperature`,
+      humidity: `${WS_BASE_URL}/humidity_sensor/ws/humidity`,
     };
 
     if (type in urls) {
@@ -168,7 +167,9 @@ function Chart({ type, color, isMounted }) {
         <div className={design}>
           <p className="bold">Ultimo Dato</p>{" "}
           <div className="value">
-            {last !== null ? `${last.toFixed(2)} ` : "Cargando..."}
+            {last !== null && last !== undefined
+              ? `${last.toFixed(2)} `
+              : "Cargando..."}
           </div>{" "}
           <div className="unit">{unit}</div>
         </div>
@@ -176,7 +177,9 @@ function Chart({ type, color, isMounted }) {
         <div className={design}>
           <p className="bold">Promedio</p>{" "}
           <div className="value">
-            {average !== null ? `${average.toFixed(2)} ` : "Cargando..."}
+            {average !== null && average !== undefined
+              ? `${average.toFixed(2)} `
+              : "Cargando..."}
           </div>{" "}
           <div className="unit">{unit}</div>
         </div>

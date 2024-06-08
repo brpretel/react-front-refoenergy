@@ -8,45 +8,61 @@ import Users from "./Pages/Users";
 import Sensor from "./Pages/Sensor";
 
 function App() {
-  const location = useLocation(); // Obtiene la ubicación actual
+  const location = useLocation();
   const showMenuAndHeader = location.pathname !== "/login";
 
-  // Función para obtener el título de la página actual
   const getPageTitle = (pathname) => {
     const path = pathname.split("/").filter(Boolean);
-    const rawTitle = path.length > 0 ? path[path.length - 1] : "leturas";
+    const rawTitle = path.length > 0 ? path[path.length - 1] : "lecturas";
     return rawTitle.charAt(0).toUpperCase() + rawTitle.slice(1);
   };
 
-  const title = getPageTitle(location.pathname); // Obtiene el título basado en la ruta
+  const title = getPageTitle(location.pathname);
 
   return (
     <div className="main-layout">
-      {showMenuAndHeader && <LeftMenu />}{" "}
+      {showMenuAndHeader && <LeftMenu />}
       <div className="content-layout">
         <div className="sticky-header-wrapper">
-          {showMenuAndHeader && <Header title={title} />}{" "}
+          {showMenuAndHeader && <Header title={title} />}
         </div>
         <Routes>
           <Route
             path="/lecturas"
-            element={<ProtectedRoute element={Dashboard} />}
+            element={
+              <ProtectedRoute
+                element={Dashboard}
+                allowedRoles={["master", "admin", "operator"]}
+              />
+            }
           />
           <Route
             path="/usuarios"
-            element={<ProtectedRoute element={Users} />}
+            element={
+              <ProtectedRoute
+                element={Users}
+                allowedRoles={["master", "admin"]}
+              />
+            }
           />
           <Route
             path="/historico"
-            element={<ProtectedRoute element={HistoryPage} />}
-            s
+            element={
+              <ProtectedRoute
+                element={HistoryPage}
+                allowedRoles={["master", "admin", "operator"]}
+              />
+            }
           />
           <Route
             path="/sensores"
-            element={<ProtectedRoute element={Sensor} />}
-            s
+            element={
+              <ProtectedRoute
+                element={Sensor}
+                allowedRoles={["master", "admin", "operator"]}
+              />
+            }
           />
-
           <Route path="*" element={<Navigate to="/lecturas" />} />
         </Routes>
       </div>

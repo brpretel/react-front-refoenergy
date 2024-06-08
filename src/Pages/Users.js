@@ -24,7 +24,7 @@ function Users() {
         setUsers(data);
         setSelectedStatuses(
           data.reduce((acc, user) => {
-            acc[user.id] = user.status;
+            acc[user.id] = getOppositeStatus(user.status);
             return acc;
           }, {})
         );
@@ -57,20 +57,24 @@ function Users() {
     fetchData();
   }, [fetchData]); // Add `fetchData` to the dependency array
 
-  const handleStatusChange = async (user, newStatus) => {
-    const url = new URL(`${API_URL}/admin/update_user_status/${user.id}`);
+  const handleStatusChange = async (userId) => {
+    const newStatus = selectedStatuses[userId];
+    console.log(`Updating user ${userId} to status: ${newStatus}`); // Agregar log para ver el estado que se está enviando
+    const url = new URL(`${API_URL}/admin/update_user_status/${userId}`);
     url.searchParams.append("status", newStatus);
 
-    console.log(`URL: ${url.toString()}`);
     try {
+      const token = localStorage.getItem("access_token"); // Obtener token del almacenamiento local
       const response = await fetch(url.toString(), {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Agregar el token de autenticación
         },
         credentials: "include",
       });
       if (response.ok) {
+        console.log("Status updated successfully");
         fetchData();
       } else {
         console.error("Failed to update status:", await response.text());
@@ -85,12 +89,17 @@ function Users() {
       ...prevStatuses,
       [userId]: value,
     }));
+    console.log(`User ${userId} status changed to: ${value}`); // Agregar log para ver el cambio de estado
   };
 
   const filteredUsers = users.filter((user) => {
     if (filter === "all") return true;
     return user.status === filter;
   });
+
+  const getOppositeStatus = (currentStatus) => {
+    return currentStatus === "active" ? "inactive" : "active";
+  };
 
   return (
     <div className="dashboard-layout">
@@ -124,23 +133,24 @@ function Users() {
                 <div className="user-config-selector">
                   <select
                     id={`status-select-${user.id}`}
-                    value={selectedStatuses[user.id] || user.status}
+                    value={selectedStatuses[user.id]}
                     onChange={(e) =>
                       handleSelectChange(user.id, e.target.value)
                     }
                     className="status-dropdown"
                   >
-                    <option value="active">Habilitar</option>
-                    <option value="inactive">Inhabilitar</option>
+                    {user.status === "pending" ? (
+                      <>
+                        <option value="active">Habilitar</option>
+                        <option value="inactive">Inhabilitar</option>
+                      </>
+                    ) : (
+                      <option value={getOppositeStatus(user.status)}>
+                        {user.status === "active" ? "Inhabilitar" : "Habilitar"}
+                      </option>
+                    )}
                   </select>
-                  <button
-                    onClick={() =>
-                      handleStatusChange(
-                        user,
-                        selectedStatuses[user.id] || user.status
-                      )
-                    }
-                  >
+                  <button onClick={() => handleStatusChange(user.id)}>
                     Actualizar
                   </button>
                 </div>

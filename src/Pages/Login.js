@@ -2,20 +2,29 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faLock, faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUser,
+  faLock,
+  faEnvelope,
+  faKey,
+} from "@fortawesome/free-solid-svg-icons";
 import logoRefoEnergy from "../logos/logo-refoenergy.png";
 import "../style/login.css"; // Asegúrate de que la ruta es correcta
 
 function Login() {
   const [mode, setMode] = useState("");
+  const [passwordMessage, setPasswordMessage] = useState("");
+  const [messageClass, setMessageClass] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+
   const toggleMode = (newMode) => {
     setMode(mode === newMode ? "" : newMode);
   };
 
   const API_URL = process.env.REACT_APP_API_URL;
 
-  async function handleRegister(username, password, email, user_vertical) {
+  async function handleRegister(username, password, email, special_code) {
     try {
       const response = await axios.post(
         `${API_URL}/auth/register`,
@@ -23,7 +32,7 @@ function Login() {
           username,
           password,
           email,
-          user_vertical,
+          special_code,
         },
         {
           headers: {
@@ -58,22 +67,45 @@ function Login() {
       navigate("/app");
     } catch (error) {
       console.error("Error al iniciar sesión", error);
+      if (error.response && error.response.status === 401) {
+        setErrorMessage(
+          "Usuario o contraseña incorrectos, o el usuario no está activo o no existe."
+        );
+      } else {
+        setErrorMessage(
+          "Ocurrió un error al intentar iniciar sesión. Por favor, inténtalo nuevamente."
+        );
+      }
     }
   }
 
   function checkPasswordMatch() {
     const password = document.getElementById("password").value;
     const confirmPassword = document.getElementById("password2").value;
-    const message = document.getElementById("passwordMatchMessage");
     const signUpButton = document.getElementById("SignUpButton");
+    const passwordRegex =
+      /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$/;
 
-    if (password === confirmPassword) {
-      message.innerHTML = "¡Las contraseñas coinciden!";
-      signUpButton.disabled = false;
-    } else {
-      message.innerHTML = "¡Las contraseñas no coinciden!";
+    if (!passwordRegex.test(password)) {
+      setPasswordMessage(
+        "La contraseña debe tener al menos 10 caracteres, incluyendo una mayúscula, un número y un carácter especial."
+      );
+      setMessageClass("error-message");
       signUpButton.disabled = true;
+    } else if (password !== confirmPassword) {
+      setPasswordMessage("¡Las contraseñas no coinciden!");
+      setMessageClass("error-message");
+      signUpButton.disabled = true;
+    } else {
+      setPasswordMessage("¡Las contraseñas coinciden!");
+      setMessageClass("success-message");
+      signUpButton.disabled = false;
     }
+  }
+
+  function handleBlur() {
+    setPasswordMessage("");
+    setMessageClass("");
   }
 
   return (
@@ -92,6 +124,7 @@ function Login() {
             <img src={logoRefoEnergy} alt="RefoEnergy Logo" />
           </div>
           <h2 className="title">Iniciar Sesión</h2>
+          {errorMessage && <div className="error-message">{errorMessage}</div>}
           <div className="input-field">
             <FontAwesomeIcon icon={faUser} />
             <input name="username" type="text" placeholder="Usuario" required />
@@ -121,11 +154,24 @@ function Login() {
           onSubmit={(e) => {
             e.preventDefault();
             const formData = new FormData(e.target);
+            const password = formData.get("password");
+
+            if (
+              !/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$/.test(
+                password
+              )
+            ) {
+              alert(
+                "La contraseña debe tener al menos 10 caracteres, incluyendo una mayúscula, un número y un carácter especial."
+              );
+              return;
+            }
+
             handleRegister(
               formData.get("username"),
-              formData.get("password"),
+              password,
               formData.get("email"),
-              formData.get("user_vertical")
+              formData.get("special_code")
             );
           }}
         >
@@ -154,6 +200,9 @@ function Login() {
               type="password"
               placeholder="Contraseña"
               required
+              onChange={checkPasswordMatch}
+              onBlur={handleBlur}
+              onFocus={checkPasswordMatch}
             />
           </div>
           <div className="input-field">
@@ -164,20 +213,24 @@ function Login() {
               type="password"
               placeholder="Confirmar Contraseña"
               onChange={checkPasswordMatch}
+              onBlur={handleBlur}
+              onFocus={checkPasswordMatch}
               required
             />
-            <span id="passwordMatchMessage"></span>
           </div>
           <div className="input-field">
-            <FontAwesomeIcon icon={faEnvelope} />
-            <select name="user_vertical" required>
-              <option value="">Seleccione su departamento</option>
-              <option value="Platform">Departamento 1</option>
-              <option value="Payment">Departamento 2</option>
-              <option value="Procure">Departamento 3</option>
-              <option value="Payment">Departamento 4</option>
-            </select>
+            <FontAwesomeIcon icon={faKey} />
+            <input name="special_code" type="text" placeholder="Token" />
           </div>
+          <div className={`password-message ${messageClass}`}>
+            {passwordMessage}
+          </div>
+          <p className="account-text-mobile">
+            ¿Ya tienes una cuenta?{" "}
+            <a href="#!" onClick={() => toggleMode("sign-in-mode")}>
+              Inicia sesión aquí
+            </a>
+          </p>
           <input
             type="submit"
             value="Registrarse"
