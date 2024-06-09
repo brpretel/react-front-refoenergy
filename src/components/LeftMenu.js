@@ -51,6 +51,10 @@ function LeftMenu() {
     navigate(path);
   };
 
+  const resetFileInput = () => {
+    fileInputRef.current.value = "";
+  };
+
   async function handleFileChange(event) {
     event.preventDefault();
     const file = event.target.files[0];
@@ -73,6 +77,7 @@ function LeftMenu() {
         );
         console.log("Archivo procesado correctamente:", response.data);
         alert("Archivo procesado correctamente");
+        resetFileInput();
       } catch (error) {
         console.error("Error al procesar el archivo:", error);
         if (error.response) {
@@ -84,13 +89,15 @@ function LeftMenu() {
           } else {
             alert(
               `Error al procesar el archivo: ${
-                error.response.data.message || "Error desconocido"
+                error.response.data.message ||
+                "Algun sensor inactivo o error en el formato de la carga de datos"
               }`
             );
           }
         } else {
           alert("Failed to process file. Network error or server is down.");
         }
+        resetFileInput();
       }
     }
   }

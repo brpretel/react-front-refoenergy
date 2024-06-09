@@ -43,16 +43,16 @@ function Sensor() {
 
   async function handleStatusChange(sensor, newStatus) {
     try {
-      const token = localStorage.getItem("access_token"); // Obtener token del almacenamiento local
+      const token = localStorage.getItem("access_token");
       const response = await axios.put(
-        `${API_URL}/admin/sensor/${sensor.id}`,
-        { status: newStatus },
+        `${API_URL}/admin/sensor/${sensor.id}?status=${newStatus}`,
+        {}, // Dejar el body vacío si no necesitas enviar nada más
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Agregar el token de autenticación
+            Authorization: `Bearer ${token}`,
           },
-          withCredentials: true, // Incluir credenciales en la solicitud
+          withCredentials: true,
         }
       );
 
@@ -70,7 +70,6 @@ function Sensor() {
         console.error("Error headers:", error.response.headers);
         if (error.response.status === 401) {
           alert("Session expired. Please log in again.");
-          // Redirigir al login o manejar de otra manera
         } else {
           alert(
             `Error al actualizar el estado: ${
@@ -162,7 +161,7 @@ function Sensor() {
       {isPopupOpen && (
         <SensorPopup
           onClose={() => setIsPopupOpen(false)}
-          onSensorAdded={fetchData} // Pass the fetchData function as a prop
+          onSensorAdded={fetchData}
         />
       )}
     </div>

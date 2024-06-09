@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Line } from "react-chartjs-2";
+import { format, parseISO } from "date-fns";
 import "../style/Dashboard.css";
 import {
   Chart as ChartJS,
@@ -87,7 +88,9 @@ function Chart({ type, color, isMounted }) {
         const newData = JSON.parse(event.data);
         console.log("Data received from WebSocket:", newData);
 
-        let labels = newData.map((row) => row.creation_date);
+        let labels = newData.map((row) =>
+          format(parseISO(row.creation_date), "yyyy-MM-dd - HH:mm")
+        );
         let values = newData.map((row) => parseFloat(row[type]));
 
         if (labels.length > 10) {
