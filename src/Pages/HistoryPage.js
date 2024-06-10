@@ -161,5 +161,4 @@ function HistoryPage() {
     </div>
   );
 }
-
 export default HistoryPage;
