@@ -6,6 +6,7 @@ import Dashboard from "./Pages/Dashboard";
 import HistoryPage from "./Pages/HistoryPage";
 import Users from "./Pages/Users";
 import Sensor from "./Pages/Sensor";
+import Manual from "./Pages/Manual";
 
 function App() {
   const location = useLocation();
@@ -59,6 +60,15 @@ function App() {
             element={
               <ProtectedRoute
                 element={Sensor}
+                allowedRoles={["master", "admin", "operator"]}
+              />
+            }
+          />
+          <Route
+            path="/manual"
+            element={
+              <ProtectedRoute
+                element={Manual}
                 allowedRoles={["master", "admin", "operator"]}
               />
             }

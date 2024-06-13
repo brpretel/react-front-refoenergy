@@ -9,6 +9,7 @@ import {
   faCamera,
   faPerson,
   faUpload,
+  faFile,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
@@ -195,6 +196,20 @@ function LeftMenu() {
                 ref={fileInputRef}
                 onChange={handleFileChange}
               />
+            </div>
+          </li>
+          <li
+            className={`menu-item ${collapsedClass} ${
+              activeMenuItem === "/manual" ? "active" : ""
+            }`}
+            onClick={() => navigateTo("/manual")}
+          >
+            <FontAwesomeIcon
+              icon={faFile}
+              className={`menu-ico ${collapsedClass}`}
+            />
+            <div className={`text-menu ${collapsedClass}`}>
+              <span>Guia de Usuario</span>
             </div>
           </li>
         </ul>
